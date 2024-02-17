@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define ERRO 1.0e-7
 
-//declaração das funções
+//declaração das funcoes
 float modulo(float x);
 int fatorial(int n);
 float potencia(int base, int expoente);
@@ -532,6 +532,8 @@ int main(int argc, char *argv[])
 		}
 			printf("\n Deseja continuar?\n s-Sim n-Nao\n");
 			scanf("%c",&resposta);
+			resposta = getchar(); 
+        	getchar();
 	}
 	return 0;
 }
