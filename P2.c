@@ -21,6 +21,7 @@ int acertarDezena(int num, int num2);
 int acertarUnidadeDezena(int num, int num2);
 int parOuImpar(int n);
 float calcularLucro(float lucro, float prejuizo);
+void pagarLucro(int lucro);
 
 // funcionamento das funcoes para gerar numero
 int lerSemente()
@@ -164,10 +165,11 @@ float seno(float x)
 	{
 	    while(flag == 1)
 	    {
+	    	anterior = atual;
 		    
 			if(i%2 == 0)
 			{
-			    atual -=  potencia(x,(j + 2)) / fatorial((j + 2));
+			    atual -=  potencia(x, (j + 2)) / fatorial((j + 2));
    			    if(modulo(atual - anterior) < ERRO)
 			   {
 					 flag = 0;
@@ -175,7 +177,7 @@ float seno(float x)
 			}
 			else
 			{
-		  	    anterior +=  potencia(x, (j + 2))/ fatorial((j + 2));
+		  	    atual +=  potencia(x, (j + 2))/ fatorial((j + 2));
 			} 
 			i++;
 		}
@@ -185,11 +187,11 @@ return atual;
 }
 
 // funcao para gerar numero
-int gerarNumero()
+int gerarNumero(int n)
 {
-	int x, n;
+	int x;
 	float y, Y, z;
-	x = lerSemente();
+	x = n;
 	y = converterDecimal(x);
 	z = 9821.0 * modulo(seno(y) + 0.211327);
 	Y = z - arredondar(z);
@@ -275,11 +277,6 @@ int acertarUnidade(int num, int num2)
 				a = 1;
 				return a;
 			}
-			else if((num % 10) == (num2 / 10))
-			{
-				a = 1;
-				return a;
-			}
 			else
 			{
 				a = 0;
@@ -295,18 +292,18 @@ int acertarUnidade(int num, int num2)
 	else
 	{
 		if(num2 > 9)
-		{
-			if(num == (num2 %10))
 			{
-				a = 1;
-				return a;
+				if(num == (num2 % 10))
+				{
+					a = 1;
+					return a;
+				}
+				else
+				{
+					a = 0;
+					return a;
+				}
 			}
-			else
-			{
-				a = 0;
-				return a;
-			}
-		}
 	}
 }
 
@@ -318,11 +315,6 @@ int acertarDezena(int num, int num2)
 		if(num2 > 9)
 		{
 			if((num / 10) == (num2 / 10))
-			{
-				a = 1;
-				return a;
-			}
-			else if((num % 10) == (num2 / 10))
 			{
 				a = 1;
 				return a;
@@ -341,7 +333,9 @@ int acertarDezena(int num, int num2)
 	}
 	else 
 	{
-			if(num  == (num2 / 10))
+		if(num2 > 9)
+		{
+			if(num == (num2 / 10))
 			{
 				a = 1;
 				return a;
@@ -351,8 +345,10 @@ int acertarDezena(int num, int num2)
 				a = 0;
 				return a;
 			}
+		}
 	}
 }
+
 
 int acertarUnidadeDezena(int num, int num2)
 {
@@ -439,14 +435,87 @@ float calcularLucro(float lucro, float prejuizo)
 	}
 }
 
+void pagarLucro(int lucro) 
+{
+    int notas_1000 = 0, notas_500 = 0, notas_100 = 0, notas_50 = 0, notas_20 = 0;
+	int notas_10 = 0, notas_5 = 0, notas_2 = 0, notas_1 = 0;
+
+    while (lucro >= 1000) 
+	{
+        lucro -= 1000;
+        notas_1000++;
+    }
+
+    while (lucro >= 500) 
+	{
+        lucro -= 500;
+        notas_500++;
+    }
+
+    while (lucro >= 100)
+	 {
+        lucro -= 100;
+        notas_100++;
+     }
+
+    while (lucro >= 50) 
+	{
+        lucro -= 50;
+        notas_50++;
+    }
+
+    while (lucro >= 20) 
+	{
+        lucro -= 20;
+        notas_20++;
+    }
+
+    while (lucro >= 10) 
+	{
+        lucro -= 10;
+        notas_10++;
+    }
+
+    while (lucro >= 5) 
+	{
+        lucro -= 5;
+        notas_5++;
+    }
+
+    while (lucro >= 2) 
+	{
+        lucro -= 2;
+        notas_2++;
+    }
+
+    while (lucro >= 1) 
+	{
+        lucro -= 1;
+        notas_1++;
+    }
+    	printf("---------------------------------------------");
+        printf("Quantidade de notas de 1000: %d\n", notas_1000);
+        printf("Quantidade de notas de 500: %d\n", notas_500);
+        printf("Quantidade de notas de 100: %d\n", notas_100);
+        printf("Quantidade de notas de 50: %d\n", notas_50); 
+        printf("Quantidade de notas de 20: %d\n", notas_20);  
+        printf("Quantidade de notas de 10: %d\n", notas_10);
+  	    printf("Quantidade de notas de 5: %d\n", notas_5);
+        printf("Quantidade de notas de 2: %d\n", notas_2);
+        printf("Quantidade de notas de 1: %d\n", notas_1);    
+}
+
+
 int main(int argc, char *argv[]) 
 {
-	int numeroSorteado, numeroApostado, flag = 1;
+	int semente, numeroSorteado, numeroApostado, flag = 1;
 	float lucro, prejuizo, quantia;
 	char resposta;
-	numeroSorteado = gerarNumero();
+	resposta = 's';
+	semente = lerSemente();
 	while(resposta != 'n')
 	{
+		numeroSorteado = gerarNumero(semente);
 		quantia = lerQuantidade();
 		numeroApostado = lerNumeroApostado();
 		if(numeroApostado == numeroSorteado)
@@ -572,7 +641,7 @@ int main(int argc, char *argv[])
 					{
 			            if (resposta != 'n') 
 						{
-			                printf("Resposta invalida. Por favor, digite 's' para Sim ou 'n' para Nao: ");
+			                printf("Resposta invalida.\n Por favor, digite 's' para Sim ou 'n' para Nao: ");
 			                scanf(" %c", &resposta);
 			            } 
 						else 
@@ -586,5 +655,7 @@ int main(int argc, char *argv[])
 			        }			
         		}
 	}
+	pagarLucro(lucro);
+	
 	return 0;
 }
