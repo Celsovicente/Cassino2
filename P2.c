@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define ERRO 1.0e-7
 
-//declaração das funcoes
+//declaracao das funcoes
 float modulo(float x);
 int fatorial(int n);
 float potencia(int base, int expoente);
@@ -11,6 +11,8 @@ float arrendodar(float z);
 float converterDecimal(float x);
 int gerarNumeroAleatorio();
 int lerSemente();
+float lerQuantidade();
+int lerNumeroApostado();
 int somaDigitos(int n);
 int capicua(int n);
 int inverso(int num, int num2);
@@ -36,6 +38,49 @@ int lerSemente()
 			flag = 1;
 	}
 	return n;
+}
+
+int lerNumeroApostado()
+{
+	int n, flag = 0;
+	while(flag == 0)
+	{
+		printf("\n Digite o numero a ser apostado:\n");
+		scanf("%d",&n);
+		if(n < 1)
+		{
+			printf("\n Erro, valor invalido!");
+		}
+		else if(n > 50)
+		{
+			printf("\n Erro, valor invalido!");
+		}
+			else
+			{
+				flag = 1;
+			}		
+	}
+	return n;
+}
+
+float lerQuantidade()
+{
+	int flag = 0;
+	float quantidade;
+	while(flag == 0)
+	{
+		printf("\n Digite a quantia apostada:\n");
+		scanf("%f",&quantidade);
+		if(quantidade < 1.0)
+		{
+			printf("\n Erro, valor invalido!");
+		}
+			else
+			{
+				flag = 1;
+			}		
+	}
+	return quantidade;
 }
 
 float modulo(float x)
@@ -230,6 +275,11 @@ int acertarUnidade(int num, int num2)
 				a = 1;
 				return a;
 			}
+			else if((num % 10) == (num2 / 10))
+			{
+				a = 1;
+				return a;
+			}
 			else
 			{
 				a = 0;
@@ -268,6 +318,11 @@ int acertarDezena(int num, int num2)
 		if(num2 > 9)
 		{
 			if((num / 10) == (num2 / 10))
+			{
+				a = 1;
+				return a;
+			}
+			else if((num % 10) == (num2 / 10))
 			{
 				a = 1;
 				return a;
@@ -386,154 +441,150 @@ float calcularLucro(float lucro, float prejuizo)
 
 int main(int argc, char *argv[]) 
 {
-	int numeroSorteado, numeroApostado;
+	int numeroSorteado, numeroApostado, flag = 1;
 	float lucro, prejuizo, quantia;
 	char resposta;
 	numeroSorteado = gerarNumero();
 	while(resposta != 'n')
 	{
-		printf("Digite a quantia apostada:\n");
-		scanf("%f", &quantia);
-		if(quantia < 1.0)
+		quantia = lerQuantidade();
+		numeroApostado = lerNumeroApostado();
+		if(numeroApostado == numeroSorteado)
 		{
-			printf("\n Erro: valor invalido, o valor nao pode ser negativo!!");
-		}
-		else
-		{
-			printf("\n Digite o valor a ser apostado:\n");
-			scanf("%d", &numeroApostado);
-			if(numeroApostado < 1)
+			if(capicua(numeroSorteado) == 1)
 			{
-				printf("\n Erro: Valor invalido, o valor nao pode ser negativo!");
+				lucro = (quantia * 7);
+				calcularLucro(lucro, prejuizo);
+				printf("---------------------------------------------");
+				printf("\n Acertou no numero sorteado");
+				printf("\n Numero sorteado eh capicua");
+				printf("\n Numero sorteado: %d", numeroSorteado);
+				printf("\n Numero apostado: %d", numeroApostado);
+				printf("\n Valor apostado: %.2f Kz", quantia);
+				printf("\n Cassino paga: %.2f KZ", lucro);
 			}
-			else if(numeroApostado > 50)
+			else if(capicua(numeroSorteado) == 0)
 			{
-				printf("\n Erro: Valor invalido, o valor nao pode ser maior que 50!");
+				lucro = (quantia * 6);
+				calcularLucro(lucro, prejuizo);
+				printf("---------------------------------------------");
+				printf("\n Acertou no numero sorteado");
+				printf("\n Numero sorteado nao eh capicua");
+				printf("\n Numero sorteado: %d", numeroSorteado);
+				printf("\n Numero apostado: %d", numeroApostado);
+				printf("\n Valor apostado: %.2f Kz", quantia);
+				printf("\n Cassino paga: %.2f KZ", lucro);
+			}
+		}
+		
+		else if(acertarUnidadeDezena(numeroApostado, numeroSorteado) == 1)
+		{
+			lucro = (quantia * 5);	
+			calcularLucro(lucro, prejuizo);				
+			printf("---------------------------------------------");
+			printf("\n Nao acertou no numero sorteado!");
+			printf("\n Acertou no digito da unidade e no valor da dezena");
+			printf("\n Numero sorteado: %d", numeroSorteado);
+			printf("\n Numero apostado: %d", numeroApostado);
+			printf("\n Valor apostado: %.2f Kz", quantia);
+			printf("\n Cassino paga: %.2f KZ", lucro);
+		}
+		
+		else if(acertarDezena(numeroApostado, numeroSorteado) == 1)
+		{
+			lucro = (quantia * 4);	
+			calcularLucro(lucro, prejuizo);				
+			printf("---------------------------------------------");
+			printf("\n Nao acertou no numero sorteado!");
+			printf("\n Acertou no digito da dezena");
+			printf("\n Numero sorteado: %d", numeroSorteado);
+			printf("\n Numero apostado: %d", numeroApostado);
+			printf("\n Valor apostado: %.2f Kz", quantia);
+			printf("\n Cassino paga: %.2f KZ", lucro);
+		}
+		else if(acertarUnidade(numeroApostado, numeroSorteado) == 1)
+		{
+			lucro = (quantia * 4);	
+			calcularLucro(lucro, prejuizo);				
+			printf("---------------------------------------------");
+			printf("\n Nao acertou no numero sorteado!");
+			printf("\n Acertou no digito da unidade");
+			printf("\n Numero sorteado: %d", numeroSorteado);
+			printf("\n Numero apostado: %d", numeroApostado);
+			printf("\n Valor apostado: %.2f Kz", quantia);
+			printf("\n Cassino paga: %.2f KZ", lucro);
+		}
+		else if(inverso(numeroApostado, numeroSorteado) == 1)
+		{
+			if(parOuImpar(numeroSorteado) == 1)
+			{
+				lucro = (quantia * 3);	
+				calcularLucro(lucro, prejuizo);				
+				printf("---------------------------------------------");
+				printf("\n Nao acertou no numero sorteado!");
+				printf("\n Acertou no numero sorteado na ordem inversa");
+				printf("\n Numero sorteado: %d", numeroSorteado);
+				printf("\n Numero apostado: %d", numeroApostado);
+				printf("\n Valor apostado: %.2f Kz", quantia);
+				printf("\n Cassino paga: %.2f KZ", lucro);
 			}
 			else
 			{
-				if(numeroApostado == numeroSorteado)
-				{
-					if(capicua(numeroSorteado) == 1)
-					{
-						lucro = (quantia * 7);
-						calcularLucro(lucro, prejuizo);
-						printf("---------------------------------------------");
-						printf("\n Acertou no numero sorteado");
-						printf("\n Numero sorteado eh capicua");
-						printf("\n Numero sorteado: %d", numeroSorteado);
-						printf("\n Numero apostado: %d", numeroApostado);
-						printf("\n Valor apostado: %.2f Kz", quantia);
-						printf("\n Cassino paga: %.2f KZ", lucro);
-					}
-					else if(capicua(numeroSorteado) == 0)
-					{
-						lucro = (quantia * 6);
-						calcularLucro(lucro, prejuizo);
-						printf("---------------------------------------------");
-						printf("\n Acertou no numero sorteado");
-						printf("\n Numero sorteado nao eh capicua");
-						printf("\n Numero sorteado: %d", numeroSorteado);
-						printf("\n Numero apostado: %d", numeroApostado);
-						printf("\n Valor apostado: %.2f Kz", quantia);
-						printf("\n Cassino paga: %.2f KZ", lucro);
-					}
-				}
-				
-				else if(acertarUnidadeDezena(numeroApostado, numeroSorteado) == 1)
-				{
-					lucro = (quantia * 5);	
-					calcularLucro(lucro, prejuizo);				
-					printf("---------------------------------------------");
-					printf("\n Nao acertou no numero sorteado!");
-					printf("\n Acertou no digito da unidade e no valor da dezena");
-					printf("\n Numero sorteado: %d", numeroSorteado);
-					printf("\n Numero apostado: %d", numeroApostado);
-					printf("\n Valor apostado: %.2f Kz", quantia);
-					printf("\n Cassino paga: %.2f KZ", lucro);
-				}
-				
-				else if(acertarDezena(numeroApostado, numeroSorteado) == 1)
-				{
-					lucro = (quantia * 4);	
-					calcularLucro(lucro, prejuizo);				
-					printf("---------------------------------------------");
-					printf("\n Nao acertou no numero sorteado!");
-					printf("\n Acertou no digito da dezena");
-					printf("\n Numero sorteado: %d", numeroSorteado);
-					printf("\n Numero apostado: %d", numeroApostado);
-					printf("\n Valor apostado: %.2f Kz", quantia);
-					printf("\n Cassino paga: %.2f KZ", lucro);
-				}
-				else if(acertarUnidade(numeroApostado, numeroSorteado) == 1)
-				{
-					lucro = (quantia * 4);	
-					calcularLucro(lucro, prejuizo);				
-					printf("---------------------------------------------");
-					printf("\n Nao acertou no numero sorteado!");
-					printf("\n Acertou no digito da unidade");
-					printf("\n Numero sorteado: %d", numeroSorteado);
-					printf("\n Numero apostado: %d", numeroApostado);
-					printf("\n Valor apostado: %.2f Kz", quantia);
-					printf("\n Cassino paga: %.2f KZ", lucro);
-				}
-				else if(inverso(numeroApostado, numeroSorteado) == 1)
-				{
-					if(parOuImpar(numeroSorteado) == 1)
-					{
-						lucro = (quantia * 3);	
-						calcularLucro(lucro, prejuizo);				
-						printf("---------------------------------------------");
-						printf("\n Nao acertou no numero sorteado!");
-						printf("\n Acertou no numero sorteado na ordem inversa");
-						printf("\n Numero sorteado: %d", numeroSorteado);
-						printf("\n Numero apostado: %d", numeroApostado);
-						printf("\n Valor apostado: %.2f Kz", quantia);
-						printf("\n Cassino paga: %.2f KZ", lucro);
-					}
-					else
-					{
-						lucro = (quantia * 2);	
-						calcularLucro(lucro, prejuizo);	
-						printf("---------------------------------------------");			
-						printf("\n Nao acertou no numero sorteado!");
-						printf("\n Acertou no numero sorteado na ordem inversa");
-						printf("\n Numero sorteado: %d", numeroSorteado);
-						printf("\n Numero apostado: %d", numeroApostado);
-						printf("\n Valor apostado: %.2f Kz", quantia);
-						printf("\n Cassino paga: %.2f KZ", lucro);
-					}
-				}
-				else if(numeroApostado == somaDigitos(numeroSorteado))
-				{
-					lucro = quantia;	
-					calcularLucro(lucro, prejuizo);		
-					printf("---------------------------------------------");		
-					printf("\n Nao acertou no numero sorteado!");
-					printf("\n Acertou na soma dos seus digitos");
-					printf("\n Numero sorteado: %d", numeroSorteado);
-					printf("\n Numero apostado: %d", numeroApostado);
-					printf("\n Valor apostado: %.2f Kz", quantia);
-					printf("\n Cassino paga: %.2f KZ", lucro);
-				}
-				else
-				{
-					prejuizo = quantia;	
-					calcularLucro(lucro, prejuizo);	
-					printf("---------------------------------------------");			
-					printf("\n Nao acertou em nada, voce perdeu!");
-					printf("\n Numero sorteado: %d", numeroSorteado);
-					printf("\n Numero apostado: %d", numeroApostado);
-					printf("\n Valor apostado: %.2f Kz", quantia);
-					printf("\n Cassino paga: %.2f KZ", prejuizo);
-				}
-				
+				lucro = (quantia * 2);	
+				calcularLucro(lucro, prejuizo);	
+				printf("---------------------------------------------");			
+				printf("\n Nao acertou no numero sorteado!");
+				printf("\n Acertou no numero sorteado na ordem inversa");
+				printf("\n Numero sorteado: %d", numeroSorteado);
+				printf("\n Numero apostado: %d", numeroApostado);
+				printf("\n Valor apostado: %.2f Kz", quantia);
+				printf("\n Cassino paga: %.2f KZ", lucro);
 			}
 		}
+		else if(numeroApostado == somaDigitos(numeroSorteado))
+		{
+			lucro = quantia;	
+			calcularLucro(lucro, prejuizo);		
+			printf("---------------------------------------------");		
+			printf("\n Nao acertou no numero sorteado!");
+			printf("\n Acertou na soma dos seus digitos");
+			printf("\n Numero sorteado: %d", numeroSorteado);
+			printf("\n Numero apostado: %d", numeroApostado);
+			printf("\n Valor apostado: %.2f Kz", quantia);
+			printf("\n Cassino paga: %.2f KZ", lucro);
+		}
+		else
+		{
+			prejuizo = quantia;	
+			calcularLucro(lucro, prejuizo);	
+			printf("---------------------------------------------");			
+			printf("\n Nao acertou em nada, voce perdeu!");
+			printf("\n Numero sorteado: %d", numeroSorteado);
+			printf("\n Numero apostado: %d", numeroApostado);
+			printf("\n Valor apostado: %.2f Kz", quantia);
+			printf("\n Jogador perdeu: %.2f KZ", prejuizo);
+		}
 			printf("\n Deseja continuar?\n s-Sim n-Nao\n");
-			scanf("%c",&resposta);
-			resposta = getchar(); 
-        	getchar();
+			scanf(" %c",&resposta);
+					while (flag)
+				 {
+			        if (resposta != 's') 
+					{
+			            if (resposta != 'n') 
+						{
+			                printf("Resposta invalida. Por favor, digite 's' para Sim ou 'n' para Nao: ");
+			                scanf(" %c", &resposta);
+			            } 
+						else 
+						{
+			                flag = 0;
+			            }
+			        } 
+					else 
+					{
+			            flag = 0;
+			        }			
+        		}
 	}
 	return 0;
 }
