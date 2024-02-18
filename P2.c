@@ -566,8 +566,8 @@ int main(int argc, char *argv[])
 		}
 			printf("\n Deseja continuar?\n s-Sim n-Nao\n");
 			scanf(" %c",&resposta);
-					while (flag)
-				 {
+				while (flag)
+				{
 			        if (resposta != 's') 
 					{
 			            if (resposta != 'n') 
